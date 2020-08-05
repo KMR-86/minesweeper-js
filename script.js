@@ -2,7 +2,7 @@ if (document.readyState !== 'loading') {
     console.log('document is already ready, just execute code here');
 
     var width = 10;
-    var bombAmount = 10;
+    var bombAmount = 20;
     var squares = [];
     var isGameOver = false;
     const bombsArray = Array(bombAmount).fill('bomb')
@@ -12,7 +12,8 @@ if (document.readyState !== 'loading') {
     //console.log(shuffledArray)
     var grid_clicked = Array(width * width).fill(0);
     var explored_in_click = Array(width * width).fill(0);
-
+    var is_flaged=Array(width*width).fill(0);
+    var flag_count=0;
     main();
 } else {
     document.addEventListener('DOMContentLoaded', function () {
@@ -108,7 +109,8 @@ function createBoard() {
 
 
     grid = document.querySelector(".grid");
-
+    flag = document.querySelector(".flag");
+    flag.innerHTML="🚩 left : "+(bombAmount-flag_count)+" &nbsp &nbsp &nbsp &nbsp Total 💣 : "+bombAmount;
     for (let i = 0; i < width * width; i++) {
         const square = document.createElement('div')
         square.setAttribute('id', i)
@@ -143,6 +145,7 @@ function createBoard() {
                     
                 }
                 if(game_won()){
+                    isGameOver=true;
                     result = document.querySelector(".result");
                     result.innerHTML="Congrats!!!"+"<br />"+" You have won ";
                     myVar = setTimeout(alertFunc_after_winning, 500);
@@ -154,8 +157,21 @@ function createBoard() {
 
         square.oncontextmenu = function (e) {
             if(!isGameOver){
-                e.preventDefault()
-                square.innerHTML = "🚩";
+                e.preventDefault();
+                id=square.getAttribute("id");
+                if(is_flaged[id]==0 && grid_clicked[id]==0 && flag_count<bombAmount){
+                    square.innerHTML = "🚩";
+                    flag_count++;
+                    is_flaged[id]=1;
+                    flag.innerHTML="🚩 left : "+(bombAmount-flag_count)+" &nbsp &nbsp &nbsp &nbsp Total 💣 : "+bombAmount;
+                } 
+                else if(is_flaged[id]==1 && grid_clicked[id]==0 && flag_count>0){
+                    square.innerHTML = "";
+                    flag_count--;
+                    is_flaged[id]=0;
+                    flag.innerHTML="🚩 left : "+(bombAmount-flag_count)+" &nbsp &nbsp &nbsp &nbsp Total 💣 : "+bombAmount;
+                }
+                
             }
             
             

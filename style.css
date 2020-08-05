@@ -32,5 +32,13 @@
     color: blue;
     position:relative;
     top:50%; 
-    left:40%;
+    left:42%;
+}
+
+.flag {
+  font-size: 20px;
+  color: blue;
+  position:relative;
+  top:50%; 
+  left:30%;
 }
