@@ -3,6 +3,10 @@ if (document.readyState !== 'loading') {
 
     var width = 10;
     var bombAmount = 20;
+    grid = document.querySelector(".grid");
+    console.log(width*40+"px");
+    grid.style.height=width*40+"px";
+    grid.style.width=width*40+"px";
     var squares = [];
     var isGameOver = false;
     const bombsArray = Array(bombAmount).fill('bomb')
@@ -32,16 +36,16 @@ function expand_around_zero(i) {
     if (squares[i].getAttribute("data") == 0) {
 
 
-        var row = Math.floor(i / 10);
-        var col = Math.floor(i % 10);
+        var row = Math.floor(i / width);
+        var col = Math.floor(i % width);
         if (col != 0 && shuffledArray[i - 1] != 'bomb') auto_click(i - 1);
         if (col != width - 1 && shuffledArray[i + 1] != 'bomb') auto_click(i + 1);
-        if (row != 0 && shuffledArray[i - 10] != 'bomb') auto_click(i - 10);
-        if (row != width - 1 && shuffledArray[i + 10] != 'bomb') auto_click(i + 10);
-        if (col != 0 && row != 0 && shuffledArray[i - 11] != 'bomb') auto_click(i - 11);
-        if (row != 0 && col != width - 1 && shuffledArray[i - 9] != 'bomb') auto_click(i - 9);
-        if (row != width - 1 && col != width - 1 && shuffledArray[i + 11] != 'bomb') auto_click(i + 11);;
-        if (row != width - 1 && col != 0 && shuffledArray[i + 9] != 'bomb') auto_click(i + 9);
+        if (row != 0 && shuffledArray[i - width] != 'bomb') auto_click(i - width);
+        if (row != width - 1 && shuffledArray[i + width] != 'bomb') auto_click(i + width);
+        if (col != 0 && row != 0 && shuffledArray[i - (width+1)] != 'bomb') auto_click(i - (width+1));
+        if (row != 0 && col != width - 1 && shuffledArray[i - (width-1)] != 'bomb') auto_click(i - (width-1));
+        if (row != width - 1 && col != width - 1 && shuffledArray[i + (width+1)] != 'bomb') auto_click(i + (width+1));;
+        if (row != width - 1 && col != 0 && shuffledArray[i + (width-1)] != 'bomb') auto_click(i + (width-1));
 
 
     }
@@ -64,14 +68,12 @@ function expand_empty_area(root, i) {
 
 
     }
-    //console.log(i+10);
-    //console.log(grid_clicked);
-    //console.log(grid_clicked[i+10]+" "+explored_in_click[i+10]);
-    var row = Math.floor(i / 10);
-    var col = i % 10;
+
+    var row = Math.floor(i / width);
+    var col = i % width;
     if (row >= 0 && row < width && col >= 0 && col < width) {
-        if (grid_clicked[i + 10] == 0 && explored_in_click[i + 10] == 0) expand_empty_area(root, i + 10);
-        if (grid_clicked[i - 10] == 0 && explored_in_click[i - 10] == 0) expand_empty_area(root, i - 10);
+        if (grid_clicked[i + width] == 0 && explored_in_click[i + width] == 0) expand_empty_area(root, i + width);
+        if (grid_clicked[i - width] == 0 && explored_in_click[i - width] == 0) expand_empty_area(root, i - width);
         if (grid_clicked[i + 1] == 0 && explored_in_click[i + 1] == 0 && col != width - 1) expand_empty_area(root, i + 1);
         if (grid_clicked[i - 1] == 0 && explored_in_click[i - 1] == 0 && col != 0) expand_empty_area(root, i - 1);
 
@@ -112,7 +114,8 @@ function createBoard() {
     flag = document.querySelector(".flag");
     flag.innerHTML="🚩 left : "+(bombAmount-flag_count)+" &nbsp &nbsp &nbsp &nbsp Total 💣 : "+bombAmount;
     for (let i = 0; i < width * width; i++) {
-        const square = document.createElement('div')
+        const square = document.createElement('div');
+        
         square.setAttribute('id', i)
         grid.appendChild(square);
         squares.push(square);
@@ -183,16 +186,16 @@ function createBoard() {
 
     for (let i = 0; i < width * width; i++) {
         var bombs_around = 0;
-        var row = Math.floor(i / 10);
-        var col = Math.floor(i % 10);
+        var row = Math.floor(i / width);
+        var col = Math.floor(i % width);
         if (col != 0 && shuffledArray[i - 1] == 'bomb') bombs_around++;
         if (col != width - 1 && shuffledArray[i + 1] == 'bomb') bombs_around++;
-        if (row != 0 && shuffledArray[i - 10] == 'bomb') bombs_around++;
-        if (row != width - 1 && shuffledArray[i + 10] == 'bomb') bombs_around++;
-        if (col != 0 && row != 0 && shuffledArray[i - 11] == 'bomb') bombs_around++;
-        if (row != 0 && col != width - 1 && shuffledArray[i - 9] == 'bomb') bombs_around++;
-        if (row != width - 1 && col != width - 1 && shuffledArray[i + 11] == 'bomb') bombs_around++;
-        if (row != width - 1 && col != 0 && shuffledArray[i + 9] == 'bomb') bombs_around++;
+        if (row != 0 && shuffledArray[i - width] == 'bomb') bombs_around++;
+        if (row != width - 1 && shuffledArray[i + width] == 'bomb') bombs_around++;
+        if (col != 0 && row != 0 && shuffledArray[i -(width+1)] == 'bomb') bombs_around++;
+        if (row != 0 && col != width - 1 && shuffledArray[i - (width-1)] == 'bomb') bombs_around++;
+        if (row != width - 1 && col != width - 1 && shuffledArray[i + (width+1)] == 'bomb') bombs_around++;
+        if (row != width - 1 && col != 0 && shuffledArray[i + (width-1)] == 'bomb') bombs_around++;
 
         squares[i].setAttribute('data', bombs_around);
 
